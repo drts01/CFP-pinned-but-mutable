@@ -862,9 +862,9 @@ The `corpus_scanner` package implements all of the above in four resumable stage
 Each stage writes its artifact to disk, so the published numbers are reproducible from the published inputs.
 
 ```bash
-src/corpus_scanner/collect.sh frame   # sampling frame; ~90-120 min, <20 MB
-src/corpus_scanner/collect.sh pilot   # 2,000 repos; ~10 min, ~2.2 GB; measures the rates that size the full run
-src/corpus_scanner/collect.sh full    # 50,000 repos; ~4 h, ~55 GB; the published corpus
+./collect.sh frame   # sampling frame; ~90-120 min, <20 MB
+./collect.sh pilot   # 2,000 repos; ~10 min, ~2.2 GB; measures the rates that size the full run
+./collect.sh full    # 50,000 repos; ~4 h, ~55 GB; the published corpus
 ```
 
 `collect.sh` resolves the token with `gh auth token`,
@@ -874,10 +874,10 @@ To drive the stages directly:
 
 ```bash
 export GITHUB_TOKEN=...   # search is 10 req/min unauthenticated, 30 req/min authenticated
-uv run --group corpus python -m corpus_scanner frame  --min-stars 100 --pushed-since 2026-04-01 --out corpus/frame.jsonl
-uv run --group corpus python -m corpus_scanner fetch  --frame corpus/frame.jsonl --cache corpus/repos --sample 50000 --seed 20260401 --concurrency 10
-uv run --group corpus python -m corpus_scanner scan   --cache corpus/repos --out corpus/corpus.csv
-uv run --group corpus python -m corpus_scanner report --csv corpus/corpus.csv --exclude-dynamic
+uv run python -m corpus_scanner frame  --min-stars 100 --pushed-since 2026-04-01 --out corpus/frame.jsonl
+uv run python -m corpus_scanner fetch  --frame corpus/frame.jsonl --cache corpus/repos --sample 50000 --seed 20260401 --concurrency 10
+uv run python -m corpus_scanner scan   --cache corpus/repos --out corpus/corpus.csv
+uv run python -m corpus_scanner report --csv corpus/corpus.csv --exclude-dynamic
 ```
 
 Configuration goes through `pydantic-settings` like the rest of the project,

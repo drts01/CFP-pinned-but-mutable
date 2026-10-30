@@ -14,7 +14,9 @@ The corpus scanner depends on `pinref` but is not part of the published `pinref`
 
 | Path                  | Contents                                                                         |
 | --------------------- | -------------------------------------------------------------------------------- |
-| `src/corpus_scanner/` | Corpus scanner package, `collect.sh` driver, and tests                           |
+| `src/corpus_scanner/` | Corpus scanner package                                                           |
+| `collect.sh`          | Resumable frame, pilot, full, and report driver                                  |
+| `tests/`              | Isolated scanner tests                                                           |
 | `corpus/`             | Published corpus artifacts and generated reports                                 |
 | `presentation/`       | Talk notes, CFP proposal, speaker bios, marimo slides, and impostor-commit tests |
 
@@ -30,7 +32,7 @@ Run four resumable stages:
 The scanner intentionally imports private collectors from `pinref`
 so classification matches the implementation under study.
 If yamlrocks rejects valid corpus YAML, scanning falls back to PyYAML's read-only BaseLoader;
-this parser is scoped to the `corpus` dependency group and is never used for editing files.
+this parser is used only for read-only classification, never for editing files.
 Cached clones with missing sparse-checkout content are repaired on fetch.
 
 Treat those imports as cross-repository coupling.
@@ -39,13 +41,14 @@ update the scanner and its tests whenever that pin moves and a collector signatu
 
 ## Usage
 
-Run `collect.sh` from anywhere; it resolves the repository root itself:
+Run `collect.sh` from the repository root as shown below, or invoke it by absolute path from anywhere;
+it resolves the repository root itself:
 
 ```bash
-src/corpus_scanner/collect.sh frame    # build the sampling frame (once, 90-120 min)
-src/corpus_scanner/collect.sh pilot    # 2,000 repos; measures the rates that size the full run
-src/corpus_scanner/collect.sh full     # 50,000 repos; the published corpus
-src/corpus_scanner/collect.sh report   # re-aggregate without refetching
+./collect.sh frame    # build the sampling frame (once, 90-120 min)
+./collect.sh pilot    # 2,000 repos; measures the rates that size the full run
+./collect.sh full     # 50,000 repos; the published corpus
+./collect.sh report   # re-aggregate without refetching
 ```
 
 The script resolves the GitHub token with `gh auth token`,
@@ -56,11 +59,11 @@ To drive the stages directly, run commands from the repository root:
 
 ```bash
 export GITHUB_TOKEN=...  # Optional, but increases the GitHub search rate limit.
-uv run --group corpus python -m corpus_scanner frame --min-stars 100 --pushed-since 2026-04-01 --out corpus/frame.jsonl
-uv run --group corpus python -m corpus_scanner fetch --frame corpus/frame.jsonl --cache corpus/repos --sample 50000 --seed 20260401 --concurrency 10
-uv run --group corpus python -m corpus_scanner scan --cache corpus/repos --out corpus/corpus.csv
-uv run --group corpus python -m corpus_scanner report --csv corpus/corpus.csv --exclude-dynamic
-uv run --group corpus python -m corpus_scanner images --csv corpus/corpus.csv --out corpus/images-full.csv
+uv run python -m corpus_scanner frame --min-stars 100 --pushed-since 2026-04-01 --out corpus/frame.jsonl
+uv run python -m corpus_scanner fetch --frame corpus/frame.jsonl --cache corpus/repos --sample 50000 --seed 20260401 --concurrency 10
+uv run python -m corpus_scanner scan --cache corpus/repos --out corpus/corpus.csv
+uv run python -m corpus_scanner report --csv corpus/corpus.csv --exclude-dynamic
+uv run python -m corpus_scanner images --csv corpus/corpus.csv --out corpus/images-full.csv
 ```
 
 ## Sampling
@@ -121,7 +124,7 @@ and `corpus/images-full.csv` through `corpus_scanner.report` and `corpus_scanner
 Speaker notes and slide types live in `presentation/layouts/scale-24x-slides.slides.json`.
 
 ```bash
-uv run --with marimo marimo edit presentation/scale-24x-slides.py
+uv run --group presentation marimo edit presentation/scale-24x-slides.py
 ```
 
 ## Tests
@@ -129,7 +132,9 @@ uv run --with marimo marimo edit presentation/scale-24x-slides.py
 Run the isolated test suite from the repository root:
 
 ```bash
-uv run --group corpus --group test pytest src/corpus_scanner/tests
+uv run --group test pytest tests/
+uv run --group typecheck pyrefly check
+uv run --group lint prek run -a
 ```
 
 The tests mock GitHub API and Git subprocess boundaries; they do not access live services.
@@ -148,3 +153,9 @@ The default paths are under `corpus/`:
 - `images-full.csv`: one row per mutable image reference in `N`, written by the `images` stage.
 
 Do not commit credentials or place tokens in these artifacts.
+Keep the CSV, JSONL, and reports as plain files so the slides and scanner can read them from a fresh checkout.
+The pre-commit hooks exclude generated `corpus/` artifacts to prevent rewriting published results;
+check artifact sizes and contents before publishing.
+If an artifact exceeds your Git host's file-size limit,
+publish it as a release asset and update the reproduction instructions
+and slide data source together rather than silently replacing it with an LFS pointer.

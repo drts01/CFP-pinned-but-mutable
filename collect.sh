@@ -29,16 +29,16 @@
 #
 # Usage
 # -----
-#   src/corpus_scanner/collect.sh frame    # build the sampling frame (run once)
-#   src/corpus_scanner/collect.sh pilot    # 2,000 repos: size the full run from measured rates
-#   src/corpus_scanner/collect.sh full     # 50,000 repos: the published corpus
-#   src/corpus_scanner/collect.sh report   # re-aggregate without refetching
+#   ./collect.sh frame    # build the sampling frame (run once)
+#   ./collect.sh pilot    # 2,000 repos: size the full run from measured rates
+#   ./collect.sh full     # 50,000 repos: the published corpus
+#   ./collect.sh report   # re-aggregate without refetching
 #
 # All stages are resumable. Re-running `fetch` skips any repository that already has a clone.
 
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$ROOT"
 
 # --- Parameters. Record every one of these on the methodology slide. ---------------------------------------------
@@ -122,7 +122,7 @@ stage_frame() {
 	mkdir -p "$OUT_DIR"
 	log "frame: stars $MIN_STARS..$MAX_STARS pushed after $PUSHED_SINCE (estimated 90-120 min)"
 
-	uv run --group corpus python -m corpus_scanner -v "$VERBOSE" frame \
+	uv run python -m corpus_scanner -v "$VERBOSE" frame \
 		--min-stars "$MIN_STARS" \
 		--max-stars "$MAX_STARS" \
 		--pushed-since "$PUSHED_SINCE" \
@@ -146,7 +146,7 @@ fetch_and_scan() {
 	require_space "$size"
 	log "$label: cloning $size repositories at concurrency $concurrency"
 
-	uv run --group corpus python -m corpus_scanner -v "$VERBOSE" fetch \
+	uv run python -m corpus_scanner -v "$VERBOSE" fetch \
 		--frame "$FRAME" \
 		--cache "$CACHE" \
 		--sample "$size" \
@@ -157,10 +157,10 @@ fetch_and_scan() {
 	cp "$MANIFEST" "$OUT_DIR/manifest-$label.jsonl"
 
 	log "$label: scanning clones"
-	uv run --group corpus python -m corpus_scanner -v "$VERBOSE" scan --cache "$CACHE" --out "$corpus"
+	uv run python -m corpus_scanner -v "$VERBOSE" scan --cache "$CACHE" --out "$corpus"
 
 	log "$label: report"
-	uv run --group corpus python -m corpus_scanner report --csv "$corpus" --exclude-dynamic \
+	uv run python -m corpus_scanner report --csv "$corpus" --exclude-dynamic \
 		--out "$OUT_DIR/report-$label.md"
 	cat "$OUT_DIR/report-$label.md"
 }
@@ -177,7 +177,7 @@ stage_pilot() {
     Then recompute the disk estimate from the measured clone size:
       PER_REPO_KB=$(du -sk corpus/repos | awk '{print int($1 / 2000)}')
     Re-run with the SAME SEED so the pilot clones are reused:
-      FULL_SIZE=... PER_REPO_KB=... src/corpus_scanner/collect.sh full
+      FULL_SIZE=... PER_REPO_KB=... ./collect.sh full
 EOF
 }
 
@@ -199,7 +199,7 @@ EOF
 
 stage_report() {
 	[ -s "$OUT_DIR/corpus.csv" ] || die "no corpus at $OUT_DIR/corpus.csv"
-	uv run --group corpus python -m corpus_scanner report --csv "$OUT_DIR/corpus.csv" --exclude-dynamic
+	uv run python -m corpus_scanner report --csv "$OUT_DIR/corpus.csv" --exclude-dynamic
 }
 
 # --- Dispatch ----------------------------------------------------------------------------------------------------

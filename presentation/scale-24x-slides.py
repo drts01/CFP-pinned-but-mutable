@@ -1,15 +1,9 @@
-# /// script
-# requires-python = ">=3.14"
-# dependencies = [
-#     "marimo~=0.25",
-# ]
-# ///
 # ruff: noqa: ANN001, ANN202, PLC0415, PLR1711
 """Slides for the SCaLE 24x talk on mutable references in GitHub Actions workflows.
 
 Run from the repository root so ``corpus_scanner`` is importable from the project environment:
 
-    uv run --with marimo marimo edit presentation/scale-24x-slides.py
+    uv run --group presentation marimo edit presentation/scale-24x-slides.py
 
 Every number on a data slide is computed from ``corpus/corpus.csv`` through
 ``corpus_scanner.report.summarize``, the same aggregation that produced ``report-full.md``,

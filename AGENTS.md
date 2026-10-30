@@ -16,7 +16,7 @@ Treat this repository as research, not a product: correctness and reproducibilit
 
 ## Repository Layout
 
-- Keep scanner code in `src/corpus_scanner/` and its tests in `src/corpus_scanner/tests/`.
+- Keep scanner code in `src/corpus_scanner/` and its tests in `tests/`.
 - Keep stage logic in its module: `frame.py`, `fetch.py`, `scan.py`, `report.py`, `images.py`, and `io.py`.
 - Keep CLI parsing and stage dispatch in `cli.py`; keep the end-to-end driver in `collect.sh`.
 - Keep corpus artifacts in `corpus/`; keep `corpus/repos/` uncommitted.
@@ -54,7 +54,7 @@ Treat this repository as research, not a product: correctness and reproducibilit
 - Target Python `>=3.14,<4`.
 - Prefer PEP 695 aliases and generics, built-in generics, `X | None`, pattern matching, and strict `zip`.
 - Use `pathlib.Path` for paths and frozen, slotted dataclasses for immutable values.
-- Keep `images.py` and `report.py` standard-library only so the slides import them without scanner dependencies.
+- Keep `images.py` and `report.py` standard-library only so the slides can reuse them without scanner-specific imports.
 - Avoid pre-3.14 compatibility code.
 
 ## Coding Style
@@ -80,6 +80,7 @@ Treat this repository as research, not a product: correctness and reproducibilit
 - Never log, echo, serialize, or commit tokens or secrets, including in artifacts and logs.
 - Send the token only to the GitHub API; keep clones unauthenticated.
 - Treat cloned repository content as untrusted input; parse it, never execute it.
+- Restrict pytest collection to `tests/`; never collect or import files under `corpus/repos/`.
 - Pin third-party GitHub Actions and pre-commit hooks to full commit SHAs with the tag in a trailing comment.
 - Keep impostor-commit and provenance test plans responsible: use owned repositories and accounts only.
 
@@ -106,8 +107,9 @@ Treat this repository as research, not a product: correctness and reproducibilit
 Run the narrowest relevant check first:
 
 ```bash
-uv run --group corpus --group test pytest src/corpus_scanner/tests
-uvx prek run -a
+uv run --group test pytest tests/
+uv run --group typecheck pyrefly check
+uv run --group lint prek run -a
 ```
 
 Report any check that could not run and the reason.
@@ -115,9 +117,9 @@ Do not claim a check passed unless it ran successfully.
 
 ## Dependencies and Tooling
 
-- Use `uv` for dependency management and execution; update `uv.lock` when dependency metadata changes.
-- Keep scanner-only dependencies in the `corpus` dependency group.
-- Configure tools in `pyproject.toml`; do not add competing configuration files.
+- Use `uv` for dependency management and execution; update and commit `uv.lock` when dependency metadata changes.
+- Keep scanner runtime dependencies in `[project].dependencies` and tooling in named dependency groups.
+- Configure Python tools in `pyproject.toml` and environments in `tox.toml`; avoid competing configurations.
 - Use Conventional Commits when asked to commit: `<type>(<scope>): <description>`,
   header at or below 72 characters, no final period.
 
