@@ -1,4 +1,6 @@
 __*/
 .*/
 !.github/
+*.bak
+.coverage
 corpus/repos/
