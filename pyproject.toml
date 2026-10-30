@@ -1,0 +1,18 @@
+[project]
+name = "talk"
+version = "0.1.0"
+readme = "README.md"
+requires-python = ">=3.14, <4"
+license = "Apache-2.0"
+authors = [ { name = "Carlos Meza", email = "carlos@digitalr00ts.com" } ]
+dependencies = []
+
+[dependency-groups]
+test = [
+  "pytest-asyncio~=1.4",
+  "pytest-cov~=7.1",
+]
+
+[build-system]
+requires = [ "uv_build~=0.13.5" ]
+build-backend = "uv_build"
