@@ -161,7 +161,7 @@ class ImagesStage(BaseSettings):
         description="Corpus CSV that selects the repositories",
     )
     cache: Path = Field(default=Path("corpus/repos"), description="Root directory holding the clones")
-    out: Path = Field(default=Path("corpus/images.csv"), description="Destination CSV")
+    out: Path = Field(default=Path("corpus/images-full.csv"), description="Destination CSV")
 
     def cli_cmd(self) -> None:
         """Run the images stage."""
