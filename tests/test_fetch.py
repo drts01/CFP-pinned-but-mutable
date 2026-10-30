@@ -1,4 +1,3 @@
-# ruff: noqa: PLR2004, S101
 """Tests for mocked corpus repository fetching."""
 
 import asyncio
@@ -6,6 +5,7 @@ import json
 from typing import TYPE_CHECKING, Any
 
 import pytest
+
 from corpus_scanner import fetch
 
 if TYPE_CHECKING:

@@ -1,10 +1,10 @@
-# ruff: noqa: S101
 """Tests for the mutable-image listing stage."""
 
 import csv
 from typing import TYPE_CHECKING
 
 import pytest
+
 from corpus_scanner.images import (
     MutableImage,
     read_images,

@@ -1,17 +1,14 @@
-# ruff: noqa: S101
 """Tests for shared corpus scanner I/O and CLI validation."""
 
 import json
 from datetime import date
-from typing import TYPE_CHECKING
+from pathlib import Path
 
 import pytest
-from corpus_scanner.cli import FrameStage, ScanStage
-from corpus_scanner.io import read_jsonl
 from pydantic import ValidationError
 
-if TYPE_CHECKING:
-    from pathlib import Path
+from corpus_scanner.cli import FrameStage, ImagesStage, ScanStage
+from corpus_scanner.io import read_jsonl
 
 
 def test_read_jsonl_skips_blank_lines(tmp_path: Path) -> None:
@@ -35,6 +32,11 @@ def test_frame_stage_rejects_inverted_star_band() -> None:
     """Reject a minimum star count greater than the maximum."""
     with pytest.raises(ValidationError, match=r"min_stars.*must not exceed max_stars"):
         FrameStage(min_stars=10, max_stars=9, pushed_since=date(2026, 4, 1))
+
+
+def test_images_stage_defaults_to_published_output() -> None:
+    """Keep the default image output aligned with the published corpus artifact."""
+    assert ImagesStage().out == Path("corpus/images-full.csv")
 
 
 def test_scan_stage_requires_a_manifest(tmp_path: Path) -> None:

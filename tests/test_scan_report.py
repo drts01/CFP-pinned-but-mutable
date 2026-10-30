@@ -1,4 +1,3 @@
-# ruff: noqa: S101
 """Tests for corpus classification and report aggregation."""
 
 import csv
@@ -6,6 +5,7 @@ from dataclasses import asdict
 from typing import TYPE_CHECKING
 
 import pytest
+
 from corpus_scanner.report import CorpusSummary, report, summarize, wilson
 from corpus_scanner.scan import RepoStats, scan_corpus, scan_repo
 
@@ -150,7 +150,7 @@ def test_scan_repo_falls_back_to_pyyaml_for_valid_flow_yaml(tmp_path: Path) -> N
     stats = scan_repo("owner/repo", _SHA, tmp_path)
 
     assert stats.parse_errors == 0
-    assert stats.uses_total == 2  # noqa: PLR2004
+    assert stats.uses_total == 2
     assert stats.uses_pinned == 1
     assert not stats.fully_pinned
     assert stats.precommit_total == 1
@@ -169,7 +169,7 @@ def test_scan_repo_counts_both_forms_of_local_uses(tmp_path: Path) -> None:
 
     stats = scan_repo("owner/repo", _SHA, tmp_path)
 
-    assert stats.uses_local == 2  # noqa: PLR2004
+    assert stats.uses_local == 2
     assert stats.uses_total == stats.uses_pinned == 1
 
 
@@ -289,7 +289,7 @@ def test_summarize_counts_every_statistic_against_its_own_denominator(tmp_path: 
         uses_local=2,
         parse_errors=1,
     )
-    assert summarize(csv_path, exclude_dynamic=False).pinned == 6  # noqa: PLR2004
+    assert summarize(csv_path, exclude_dynamic=False).pinned == 6
 
 
 @pytest.mark.parametrize(
