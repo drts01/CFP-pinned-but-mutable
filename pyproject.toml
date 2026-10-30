@@ -42,6 +42,9 @@ ci = [
 ]
 lint = [ "prek~=0.3" ]
 presentation = [ "marimo~=25.2" ]
+typecheck = [
+  "pyrefly~=1.2",
+]
 
 [tool.uv]
 # The scanner imports private pinref collectors; pin the exact commit under study.
