@@ -8,7 +8,7 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from notes.corpus_scanner import frame
+from corpus_scanner import frame
 
 if TYPE_CHECKING:
     from pathlib import Path

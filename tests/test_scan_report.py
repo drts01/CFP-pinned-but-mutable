@@ -6,8 +6,8 @@ from dataclasses import asdict
 from typing import TYPE_CHECKING
 
 import pytest
-from notes.corpus_scanner.report import CorpusSummary, report, summarize, wilson
-from notes.corpus_scanner.scan import RepoStats, scan_corpus, scan_repo
+from corpus_scanner.report import CorpusSummary, report, summarize, wilson
+from corpus_scanner.scan import RepoStats, scan_corpus, scan_repo
 
 if TYPE_CHECKING:
     from pathlib import Path

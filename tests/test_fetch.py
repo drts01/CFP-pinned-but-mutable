@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Any
 
 import pytest
 
-from notes.corpus_scanner import fetch
+from corpus_scanner import fetch
 
 if TYPE_CHECKING:
     from pathlib import Path

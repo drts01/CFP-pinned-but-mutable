@@ -5,7 +5,7 @@ import csv
 from typing import TYPE_CHECKING
 
 import pytest
-from notes.corpus_scanner.images import (
+from corpus_scanner.images import (
     MutableImage,
     read_images,
     repos_per_image,
@@ -14,12 +14,12 @@ from notes.corpus_scanner.images import (
     tag_shape,
     write_images,
 )
-from notes.corpus_scanner.scan import list_mutable_images
+from corpus_scanner.scan import list_mutable_images
 
 if TYPE_CHECKING:
     from pathlib import Path
 
-    from notes.corpus_scanner.images import TagShape
+    from corpus_scanner.images import TagShape
 
 _SHA = "a" * 40
 _DIGEST = "b" * 64

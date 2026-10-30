@@ -8,8 +8,8 @@ from typing import TYPE_CHECKING
 import pytest
 from pydantic import ValidationError
 
-from notes.corpus_scanner.cli import FrameStage, ScanStage
-from notes.corpus_scanner.io import read_jsonl
+from corpus_scanner.cli import FrameStage, ScanStage
+from corpus_scanner.io import read_jsonl
 
 if TYPE_CHECKING:
     from pathlib import Path
