@@ -41,14 +41,15 @@ ci = [
   "tox-uv~=1.36",
 ]
 lint = [ "prek~=0.3" ]
-presentation = [ "marimo~=25.2" ]
+presentation = [ "marimo~=0.25.2" ]
 typecheck = [
   "pyrefly~=1.2",
+  "types-pyyaml>=6",
 ]
 
 [tool.uv]
-# The scanner imports private pinref collectors; pin the exact commit under study.
-sources.pinref = { git = "https://github.com/drts01/pinref", rev = "e3164b177544ac23d74509791bd508255cf7dfdb" }
+# Pin private collector behavior to the exact commit; GitHub rejects Git fetches by commit SHA here.
+sources.pinref = { url = "https://github.com/drts01/pinref/archive/e3164b177544ac23d74509791bd508255cf7dfdb.tar.gz" }
 build-backend.module-name = "corpus_scanner"
 
 [tool.ruff]
@@ -103,7 +104,7 @@ lint.ignore = [
   "D213",   # multi-line-summary-second-line — conflicts with D212
 ]
 lint.explicit-preview-rules = true
-lint.per-file-ignores."src/corpus_scanner/tests/*" = [
+lint.per-file-ignores."tests/*" = [
   "ANN",     # flake8-annotations — test signatures use minimal types
   "D",       # pydocstyle — tests don't need comprehensive docstrings
   "PLR2004", # Pylint magic-value-comparison — asserting literal expected values is normal in tests
@@ -120,19 +121,26 @@ fail-under = 100
 ignore-semiprivate = true
 ignore-private = true
 ignore-nested-functions = true
-exclude = [ "presentation/", "src/corpus_scanner/tests/" ]
+exclude = [ "presentation/", "tests/" ]
 verbose = 2
 style = "google"
-typecheck = [
-  "pyrefly~=1.2",
-]
+
+[tool.pyrefly]
+python-version = "3.14"
+project-includes = [ "src" ]
+preset = "strict"
 
 [tool.pytest]
 addopts = [
+  "--cov",
+  "--doctest-modules",
   "--strict-markers",
   "--tb=short",
 ]
-testpaths = [ "src" ]
+asyncio_mode = "auto"
+# Fetched repositories contain untrusted Python files; never collect them as tests.
+norecursedirs = [ "corpus", "presentation", ".tox", ".venv" ]
+testpaths = [ "tests" ]
 
 [tool.coverage]
 run.source_pkgs = [ "corpus_scanner" ]
