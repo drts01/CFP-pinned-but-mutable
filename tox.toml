@@ -1,0 +1,46 @@
+[env_run_base]
+runner = "uv-venv-lock-runner"
+description = "Run pytest with coverage"
+package = "editable"
+dependency_groups = [ "test" ]
+pass_env = [ "CI", "GITHUB_*" ]
+commands = [ [ "pytest", "{posargs}" ] ]
+env = { PYTHON_GIL = 0 }
+
+[env.build]
+description = "Validate sdist/wheel build, metadata, and installability"
+package = "skip"
+skip_install = true
+dependency_groups = [ "build" ]
+pass_env = [ "DIST_DIR" ]
+commands = [
+  [ "python", "-m", "build", "--outdir", "{env:DIST_DIR:{env_tmp_dir}/dist}" ],
+  [ "twine", "check", "{env:DIST_DIR:{env_tmp_dir}/dist}/*" ],
+  [ "check-wheel-contents", "{env:DIST_DIR:{env_tmp_dir}/dist}" ],
+]
+
+[env.lint]
+description = "Run all prek/pre-commit hooks"
+package = "skip"
+skip_install = true
+dependency_groups = [ "lint" ]
+commands = [ [ "prek", { replace = "posargs", default = [ "run", "-a" ], extend = true } ] ]
+
+[env.typecheck]
+description = "Static type checking with Pyrefly"
+dependency_groups = [
+  "test",
+  "typecheck",
+]
+commands = [ [ "pyrefly", { replace = "posargs", default = [ "check" ], extend = true } ] ]
+
+[tox]
+env_list = [ "build", "typecheck", "lint", "py31{4,5}{,t}" ]
+min_version = "4.22"
+requires = [ "tox-uv" ]
+
+[gh.python]
+"3.15" = [ "py315" ]
+"3.15t" = [ "py315t" ]
+"3.14t" = [ "py314t" ]
+"3.14" = [ "py314", "typecheck", "build" ]
