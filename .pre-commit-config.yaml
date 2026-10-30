@@ -110,7 +110,7 @@ repos:
     hooks:
       - id: interrogate
         args: [--config=pyproject.toml]
-        exclude: ^(presentation|src/corpus_scanner/tests)/
+        exclude: ^(presentation|tests)/
         additional_dependencies: [tomli]
 
   - repo: https://github.com/tombi-toml/tombi-pre-commit
