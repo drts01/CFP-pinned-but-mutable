@@ -7,14 +7,14 @@
 # ruff: noqa: ANN001, ANN202, PLC0415, PLR1711
 """Slides for the SCaLE 24x talk on mutable references in GitHub Actions workflows.
 
-Run from the repository root:
+Run from the repository root so ``corpus_scanner`` is importable from the project environment:
 
-    uvx marimo edit --sandbox notes/scale-24x-slides.py
+    uv run --with marimo marimo edit presentation/scale-24x-slides.py
 
-Every number on a data slide is computed from ``notes/corpus/corpus.csv`` through
+Every number on a data slide is computed from ``corpus/corpus.csv`` through
 ``corpus_scanner.report.summarize``, the same aggregation that produced ``report-full.md``,
-or from ``notes/corpus/images-full.csv``, written by the scanner's ``images`` stage.
-Speaker notes and slide types live in ``notes/layouts/scale-24x-slides.slides.json``.
+or from ``corpus/images-full.csv``, written by the scanner's ``images`` stage.
+Speaker notes and slide types live in ``presentation/layouts/scale-24x-slides.slides.json``.
 The file-level ``noqa`` covers marimo's generated cell signatures, cell-local imports, and bare returns.
 """
 
@@ -30,6 +30,7 @@ app = marimo.App(
 @app.cell(hide_code=True)
 def _():
     import marimo as mo
+
     from corpus_scanner.images import read_images, repos_per_image, repos_per_kind, repos_per_shape
     from corpus_scanner.report import summarize, wilson
 
@@ -38,8 +39,9 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo, read_images, summarize):
-    s = summarize(mo.notebook_dir() / "corpus" / "corpus.csv", exclude_dynamic=True)
-    images = read_images(mo.notebook_dir() / "corpus" / "images-full.csv")
+    _corpus = mo.notebook_dir().parent / "corpus"
+    s = summarize(_corpus / "corpus.csv", exclude_dynamic=True)
+    images = read_images(_corpus / "images-full.csv")
     return images, s
 
 

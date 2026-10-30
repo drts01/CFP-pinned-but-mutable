@@ -120,7 +120,8 @@ Revised 2026-10-26 for a longer session (40 minutes of content plus 5 of questio
 - The close gained a "Questions you were about to ask" slide.
 
 Revised 2026-10-20 for `ratchet`, which pins `docker://`, `container.image`, and `services[*].image` on GitHub Actions
-(see [`docs/explanation/comparison.md`](../docs/explanation/comparison.md)):
+(see
+[`pinref` `docs/explanation/comparison.md`](https://github.com/drts01/pinref/blob/e3164b177544ac23d74509791bd508255cf7dfdb/docs/explanation/comparison.md)):
 
 - Dropped "the part nobody is talking about"; `ratchet` and Updatecli already address the image rows.
 - Named `ratchet` in the abstract.
@@ -480,7 +481,7 @@ The full scan finished on 2026-10-21.
 
 | #   | Task                                                                                            | Blocks       | Status                                                                                                                             |
 | --- | ----------------------------------------------------------------------------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Build the corpus scanner; sample public repos with workflow files                               | Abstract `N` | **Done** — `notes/corpus_scanner/`                                                                                                 |
+| 1   | Build the corpus scanner; sample public repos with workflow files                               | Abstract `N` | **Done** — `src/corpus_scanner/`                                                                                                   |
 | 2   | Run the pilot; decide the framing from the measured rates                                       | Thesis       | **Done** — see [Pilot Results](#pilot-results)                                                                                     |
 | 3   | Fact-check the fork-network and pinning claims against GitHub's documentation                   | Thesis       | **Done** — see [Primary-Source Review](#primary-source-review)                                                                     |
 | 4   | Run the full 50,000-repository scan; publish the artifacts                                      | Abstract `N` | **Scan done** — see [Full-Run Results](#full-run-results); publish data, code, seed, and instructions with the talk and slides     |
@@ -575,7 +576,7 @@ As of 2026-10-29; the CFP closes 2026-11-01.
 
 Run 2026-10-21 over 49,984 repositories, a seeded 50,000-repository sample of the 149,570-repository frame.
 The other 16 repositories no longer existed when cloned.
-Full output is in [`corpus/report-full.md`](corpus/report-full.md); per-repository rows are in `corpus/corpus.csv`.
+Full output is in [`corpus/report-full.md`](../corpus/report-full.md); per-repository rows are in `corpus/corpus.csv`.
 This section supersedes the pilot figures below for every slide.
 
 | Statistic                                   | Value                | 95% CI      | Verdict                                  |
@@ -609,7 +610,7 @@ Corrections applied before these figures were produced:
 ### Image breakdown
 
 Run 2026-10-26 with the scanner's `images` stage over the same clones;
-rows are in [`corpus/images-full.csv`](corpus/images-full.csv).
+rows are in [`corpus/images-full.csv`](../corpus/images-full.csv).
 It found 1,129 mutable image references in 358 repositories, matching `X` and the sum of `image_mutable` exactly.
 
 | Where the mutable image is | Repositories (of 358) | References |
@@ -639,7 +640,7 @@ more than half of the repositories with a mutable image float the environment ev
 Kept for the record; the figures in [Full-Run Results](#full-run-results) replace these on every slide.
 
 Run 2026-10-19 over a 1,996-repository subsample of the frame;
-full output in [`corpus/report-pilot.md`](corpus/report-pilot.md).
+full output in [`corpus/report-pilot.md`](../corpus/report-pilot.md).
 
 | Statistic                                   | Value            | 95% CI          | Verdict                         |
 | ------------------------------------------- | ---------------- | --------------- | ------------------------------- |
@@ -736,7 +737,8 @@ and it positions the speaker as current rather than as someone who missed a plat
 **This also matters beyond the CFP.**
 `pinref` competes with a first-party feature on `uses:` pinning and provenance,
 and should compete on the surface the lockfile does not cover.
-Captured in [`docs/explanation/threat-model.md` §4.1 and §6.1](../docs/explanation/threat-model.md).
+Captured in
+[`pinref` `docs/explanation/threat-model.md` §4.1 and §6.1](https://github.com/drts01/pinref/blob/e3164b177544ac23d74509791bd508255cf7dfdb/docs/explanation/threat-model.md).
 
 **Process note.**
 Two consecutive thesis pivots were proposed before anyone read the primary sources.
@@ -747,7 +749,7 @@ Fact-check against primary sources (tasks 3, 9, and 16) *before* the next framin
 Checked 2026-10-20 against vendor documentation for GitLab CI, CircleCI, Azure Pipelines, Jenkins, Buildkite, Tekton,
 Drone, Docker Hub, Amazon ECR, and GHCR.
 Full write-up, written for a general audience, in
-[`docs/explanation/mutable-references-across-platforms.md`](../docs/explanation/mutable-references-across-platforms.md).
+[`pinref` `docs/explanation/mutable-references-across-platforms.md`](https://github.com/drts01/pinref/blob/e3164b177544ac23d74509791bd508255cf7dfdb/docs/explanation/mutable-references-across-platforms.md).
 
 **The thesis generalizes, and narrows.**
 Every platform has mutable config-layer references.
@@ -856,13 +858,13 @@ State the methodology on a slide; the committee and the audience will both ask.
 
 ### Running the scan
 
-The `notes.corpus_scanner` module implements all of the above in four resumable stages.
+The `corpus_scanner` package implements all of the above in four resumable stages.
 Each stage writes its artifact to disk, so the published numbers are reproducible from the published inputs.
 
 ```bash
-notes/corpus_scanner/collect.sh frame   # sampling frame; ~90-120 min, <20 MB
-notes/corpus_scanner/collect.sh pilot   # 2,000 repos; ~10 min, ~2.2 GB; measures the rates that size the full run
-notes/corpus_scanner/collect.sh full    # 50,000 repos; ~4 h, ~55 GB; the published corpus
+src/corpus_scanner/collect.sh frame   # sampling frame; ~90-120 min, <20 MB
+src/corpus_scanner/collect.sh pilot   # 2,000 repos; ~10 min, ~2.2 GB; measures the rates that size the full run
+src/corpus_scanner/collect.sh full    # 50,000 repos; ~4 h, ~55 GB; the published corpus
 ```
 
 `collect.sh` resolves the token with `gh auth token`,
@@ -872,10 +874,10 @@ To drive the stages directly:
 
 ```bash
 export GITHUB_TOKEN=...   # search is 10 req/min unauthenticated, 30 req/min authenticated
-uv run --group corpus python -m notes.corpus_scanner frame  --min-stars 100 --pushed-since 2026-04-01 --out notes/corpus/frame.jsonl
-uv run --group corpus python -m notes.corpus_scanner fetch  --frame notes/corpus/frame.jsonl --cache notes/corpus/repos --sample 50000 --seed 20260401 --concurrency 10
-uv run --group corpus python -m notes.corpus_scanner scan   --cache notes/corpus/repos --out notes/corpus/corpus.csv
-uv run --group corpus python -m notes.corpus_scanner report --csv notes/corpus/corpus.csv --exclude-dynamic
+uv run --group corpus python -m corpus_scanner frame  --min-stars 100 --pushed-since 2026-04-01 --out corpus/frame.jsonl
+uv run --group corpus python -m corpus_scanner fetch  --frame corpus/frame.jsonl --cache corpus/repos --sample 50000 --seed 20260401 --concurrency 10
+uv run --group corpus python -m corpus_scanner scan   --cache corpus/repos --out corpus/corpus.csv
+uv run --group corpus python -m corpus_scanner report --csv corpus/corpus.csv --exclude-dynamic
 ```
 
 Configuration goes through `pydantic-settings` like the rest of the project,

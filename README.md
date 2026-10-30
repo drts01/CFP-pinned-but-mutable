@@ -1,11 +1,22 @@
-# Corpus scanner
+# pinned-but-mutable
 
 Measure residual mutable references in repositories whose GitHub Actions `uses:` references are pinned to full commit
 SHAs.
 
-This research tool supports the SCaLE 24x talk documented in [`../scale-24x-talk.md`](../scale-24x-talk.md).
+This repository holds the research, corpus data,
+and presentation materials for the SCaLE 24x talk "You Pinned Your GitHub Actions.
+What's Still Mutable?"
+Talk notes live in [`presentation/scale-24x-talk.md`](presentation/scale-24x-talk.md).
 
-It is not part of the published `pinref` package.
+The corpus scanner depends on `pinref` but is not part of the published `pinref` package.
+
+## Layout
+
+| Path                  | Contents                                                                         |
+| --------------------- | -------------------------------------------------------------------------------- |
+| `src/corpus_scanner/` | Corpus scanner package, `collect.sh` driver, and tests                           |
+| `corpus/`             | Published corpus artifacts and generated reports                                 |
+| `presentation/`       | Talk notes, CFP proposal, speaker bios, marimo slides, and impostor-commit tests |
 
 ## Methodology
 
@@ -22,18 +33,19 @@ If yamlrocks rejects valid corpus YAML, scanning falls back to PyYAML's read-onl
 this parser is scoped to the `corpus` dependency group and is never used for editing files.
 Cached clones with missing sparse-checkout content are repaired on fetch.
 
-Treat those imports as repository-local coupling;
-changes to collector signatures may require corresponding scanner updates.
+Treat those imports as cross-repository coupling.
+`pyproject.toml` pins `pinref` to an exact commit SHA through `tool.uv.sources`;
+update the scanner and its tests whenever that pin moves and a collector signature changes.
 
 ## Usage
 
 Run `collect.sh` from anywhere; it resolves the repository root itself:
 
 ```bash
-notes/corpus_scanner/collect.sh frame    # build the sampling frame (once, 90-120 min)
-notes/corpus_scanner/collect.sh pilot    # 2,000 repos; measures the rates that size the full run
-notes/corpus_scanner/collect.sh full     # 50,000 repos; the published corpus
-notes/corpus_scanner/collect.sh report   # re-aggregate without refetching
+src/corpus_scanner/collect.sh frame    # build the sampling frame (once, 90-120 min)
+src/corpus_scanner/collect.sh pilot    # 2,000 repos; measures the rates that size the full run
+src/corpus_scanner/collect.sh full     # 50,000 repos; the published corpus
+src/corpus_scanner/collect.sh report   # re-aggregate without refetching
 ```
 
 The script resolves the GitHub token with `gh auth token`,
@@ -44,11 +56,11 @@ To drive the stages directly, run commands from the repository root:
 
 ```bash
 export GITHUB_TOKEN=...  # Optional, but increases the GitHub search rate limit.
-uv run --group corpus python -m notes.corpus_scanner frame --min-stars 100 --pushed-since 2026-04-01 --out notes/corpus/frame.jsonl
-uv run --group corpus python -m notes.corpus_scanner fetch --frame notes/corpus/frame.jsonl --cache notes/corpus/repos --sample 50000 --seed 20260401 --concurrency 10
-uv run --group corpus python -m notes.corpus_scanner scan --cache notes/corpus/repos --out notes/corpus/corpus.csv
-uv run --group corpus python -m notes.corpus_scanner report --csv notes/corpus/corpus.csv --exclude-dynamic
-uv run --group corpus python -m notes.corpus_scanner images --csv notes/corpus/corpus.csv --out notes/corpus/images-full.csv
+uv run --group corpus python -m corpus_scanner frame --min-stars 100 --pushed-since 2026-04-01 --out corpus/frame.jsonl
+uv run --group corpus python -m corpus_scanner fetch --frame corpus/frame.jsonl --cache corpus/repos --sample 50000 --seed 20260401 --concurrency 10
+uv run --group corpus python -m corpus_scanner scan --cache corpus/repos --out corpus/corpus.csv
+uv run --group corpus python -m corpus_scanner report --csv corpus/corpus.csv --exclude-dynamic
+uv run --group corpus python -m corpus_scanner images --csv corpus/corpus.csv --out corpus/images-full.csv
 ```
 
 ## Sampling
@@ -71,7 +83,7 @@ Publish `sample.jsonl` and the seed; both are required to reproduce the corpus.
 
 ## Denominators
 
-`report` distinguishes three populations, because conflating them inflates or deflates the pin rate:
+`report` distinguishes these populations, because conflating them inflates or deflates the pin rate:
 
 | Population            | Definition                                                                    |
 | --------------------- | ----------------------------------------------------------------------------- |
@@ -93,7 +105,7 @@ where the normal interval can extend past zero or one.
 `corpus.csv` stores counts only.
 The `images` stage re-reads the clones of `N` repositories that have a mutable image and writes one row per static,
 non-digest image reference: repository, file, kind, image, tag, and tag shape.
-It requires the clones; run it before deleting `repos/`.
+It requires the clones; run it before deleting `corpus/repos/`.
 
 - **Kind:** `container` (job container, either form), `service` (`services.<name>.image`), or `step` (`docker://`).
 - **Shape:** `latest` (explicit or omitted), `major` (`20`), `minor` (`3.14`), `patch` (`1.27.3`), or `named` (`lts`).
@@ -101,25 +113,38 @@ It requires the clones; run it before deleting `repos/`.
 
 The row count must equal the sum of `image_mutable` over the same repositories in `corpus.csv`.
 
+## Slides
+
+The slides are a marimo notebook.
+Every number on a data slide is computed from `corpus/corpus.csv`
+and `corpus/images-full.csv` through `corpus_scanner.report` and `corpus_scanner.images`; none is hard-coded.
+Speaker notes and slide types live in `presentation/layouts/scale-24x-slides.slides.json`.
+
+```bash
+uv run --with marimo marimo edit presentation/scale-24x-slides.py
+```
+
 ## Tests
 
 Run the isolated test suite from the repository root:
 
 ```bash
-uv run --group corpus --group test python -m pytest --no-cov notes/corpus_scanner/tests
+uv run --group corpus --group test pytest src/corpus_scanner/tests
 ```
 
 The tests mock GitHub API and Git subprocess boundaries; they do not access live services.
 
 ## Artifacts
 
-The default paths remain under `notes/corpus/`:
+The default paths are under `corpus/`:
 
 - `frame.jsonl`: sampled repository names and star counts.
 - `frame.meta.json`: sampling parameters and frame size.
 - `sample.jsonl`: the repositories selected for fetching, written whenever `--sample` is used.
-- `repos/`: sparse clones and `manifest.jsonl` fetch outcomes.
-- `corpus.csv`: per-repository classification data.
+- `repos/`: sparse clones and `manifest.jsonl` fetch outcomes; ignored by Git and reproducible from the manifest.
+- `manifest-pilot.jsonl`, `manifest-full.jsonl`: per-repository HEAD commit SHAs that pin each snapshot.
+- `corpus-pilot.csv`, `corpus.csv`: per-repository classification data.
+- `report-pilot.md`, `report-full.md`: aggregated headline figures.
 - `images-full.csv`: one row per mutable image reference in `N`, written by the `images` stage.
 
 Do not commit credentials or place tokens in these artifacts.

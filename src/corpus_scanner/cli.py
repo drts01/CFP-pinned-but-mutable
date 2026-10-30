@@ -28,7 +28,7 @@ class FrameStage(BaseSettings):
     """Build the sampling frame from the GitHub repository search API."""
 
     out: Path = Field(
-        default=Path("notes/corpus/frame.jsonl"),
+        default=Path("corpus/frame.jsonl"),
         description="Destination JSON Lines frame; the query is recorded in a sibling .meta.json",
     )
     min_stars: int = Field(default=100, ge=0, description="Inclusive lower star bound of the frame")
@@ -79,8 +79,8 @@ class FrameStage(BaseSettings):
 class FetchStage(BaseSettings):
     """Blobless sparse-clone every repository in the frame."""
 
-    frame: Path = Field(default=Path("notes/corpus/frame.jsonl"), description="Frame file to read")
-    cache: Path = Field(default=Path("notes/corpus/repos"), description="Root directory for clones")
+    frame: Path = Field(default=Path("corpus/frame.jsonl"), description="Frame file to read")
+    cache: Path = Field(default=Path("corpus/repos"), description="Root directory for clones")
     concurrency: int = Field(default=16, ge=1, description="Max simultaneous clones")
     timeout: float = Field(default=120.0, gt=0, description="Per-git-invocation timeout in seconds")
     sample: int | None = Field(
@@ -109,9 +109,9 @@ class FetchStage(BaseSettings):
 class ScanStage(BaseSettings):
     """Classify the clones into the corpus CSV."""
 
-    cache: Path = Field(default=Path("notes/corpus/repos"), description="Root directory holding the clones")
+    cache: Path = Field(default=Path("corpus/repos"), description="Root directory holding the clones")
     manifest: Path | None = Field(default=None, description="Fetch manifest; defaults to <cache>/manifest.jsonl")
-    out: Path = Field(default=Path("notes/corpus/corpus.csv"), description="Destination CSV")
+    out: Path = Field(default=Path("corpus/corpus.csv"), description="Destination CSV")
     limit: int | None = Field(default=None, ge=1, description="Scan only the first N repositories")
 
     def cli_cmd(self) -> None:
@@ -132,7 +132,7 @@ class ReportStage(BaseSettings):
     """Aggregate the corpus CSV into the headline numbers."""
 
     csv_path: Path = Field(
-        default=Path("notes/corpus/corpus.csv"),
+        default=Path("corpus/corpus.csv"),
         validation_alias=AliasChoices("csv", "csv_path"),
         description="Corpus CSV to aggregate",
     )
@@ -156,12 +156,12 @@ class ImagesStage(BaseSettings):
     """List every mutable image reference in fully pinned repositories with an image gap."""
 
     csv_path: Path = Field(
-        default=Path("notes/corpus/corpus.csv"),
+        default=Path("corpus/corpus.csv"),
         validation_alias=AliasChoices("csv", "csv_path"),
         description="Corpus CSV that selects the repositories",
     )
-    cache: Path = Field(default=Path("notes/corpus/repos"), description="Root directory holding the clones")
-    out: Path = Field(default=Path("notes/corpus/images.csv"), description="Destination CSV")
+    cache: Path = Field(default=Path("corpus/repos"), description="Root directory holding the clones")
+    out: Path = Field(default=Path("corpus/images.csv"), description="Destination CSV")
 
     def cli_cmd(self) -> None:
         """Run the images stage."""
