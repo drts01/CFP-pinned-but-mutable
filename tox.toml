@@ -1,10 +1,14 @@
+env_list = [ "build", "typecheck", "lint", "py" ]
+min_version = "4.22"
+requires = [ "tox-uv" ]
+
 [env_run_base]
 runner = "uv-venv-lock-runner"
 description = "Run pytest with coverage"
 package = "editable"
 dependency_groups = [ "test" ]
 pass_env = [ "CI", "GITHUB_*" ]
-commands = [ [ "pytest", "{posargs}" ] ]
+commands = [ [ "pytest", { replace = "posargs", default = [ "tests" ], extend = true } ] ]
 env = { PYTHON_GIL = 0 }
 
 [env.build]
@@ -33,11 +37,6 @@ dependency_groups = [
   "typecheck",
 ]
 commands = [ [ "pyrefly", { replace = "posargs", default = [ "check" ], extend = true } ] ]
-
-[tox]
-env_list = [ "build", "typecheck", "lint", "py31{4,5}{,t}" ]
-min_version = "4.22"
-requires = [ "tox-uv" ]
 
 [gh.python]
 "3.15" = [ "py315" ]
