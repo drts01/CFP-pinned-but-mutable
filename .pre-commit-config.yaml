@@ -1,0 +1,162 @@
+---
+exclude: ^(CHANGELOG\.md|uv\.lock|\.secrets\.baseline|memory-bank)$
+repos:
+  - repo: meta
+    hooks:
+      - id: check-hooks-apply
+      - id: check-useless-excludes
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c  # frozen: v6.0.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-executables-have-shebangs
+      - id: check-merge-conflict
+      - id: check-shebang-scripts-are-executable
+      - id: check-toml
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: fix-byte-order-marker
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: name-tests-test
+        args: [--pytest-test-first]
+      - id: trailing-whitespace
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: 25bcf95026b96e2dd3c0aec3090c3d6ef6ca2e6c  # frozen: v0.17.3
+    hooks:
+      - id: ruff-check
+        args: [--fix, --exit-non-zero-on-fix]
+        stages: [pre-commit]
+      - id: ruff-format
+      - id: ruff-check
+        description: Run `ruff check` with GitHub annotations.
+        name: ruff github
+        alias: ruff-github
+        args: [--output-format=github]
+        stages: [manual]
+      - id: ruff-check
+        description: Run `ruff check` with sarif output.
+        name: ruff sarif
+        alias: ruff-sarif
+        args: [--output-format=sarif, --output-file=ruff.sarif]
+        stages: [manual]
+
+  # - repo: https://github.com/returntocorp/semgrep
+  #   rev: v1.171.0
+  #   hooks:
+  #     - id: semgrep
+  #       args: [--config=auto, --error, src/]
+  #       stages: [manual]
+
+  # - repo: https://github.com/Yelp/detect-secrets
+  #   rev: v1.5.0
+  #   hooks:
+  #     - id: detect-secrets
+  #       args: [--baseline, .secrets.baseline]
+  #       exclude: |
+  #         (?x)^(
+  #           \.secrets\.baseline|
+  #           \.pytest_cache/|
+  #           \.ruff_cache/|
+  #           \.venv/|
+  #           htmlcov/|
+  #           \.coverage|
+  #           .*\.egg-info/
+  #         )$
+
+  - repo: https://github.com/Mateusz-Grzelinski/actionlint-py
+    rev: 805f85e558841bf4d852335e036b33d2b26be1cc  # frozen: v1.7.12.25
+    hooks:
+      - id: actionlint
+        additional_dependencies:
+          - pyflakes>=3.4.0
+          - shellcheck-py>=0.11.0.1
+
+  - repo: https://github.com/zizmorcore/zizmor-pre-commit
+    rev: c92afdf2c6ca336aaa8f39e2bd8d48f62dbd8e1f  # frozen: v1.31.1
+    hooks:
+      - id: zizmor
+        args: [--no-progress, --persona=auditor, --fix]
+        stages: [pre-commit]
+      - id: zizmor
+        name: zizmor github
+        alias: zizmor-github
+        args: [--no-progress, --persona=auditor, --format=github]
+        stages: [manual]
+      - id: zizmor
+        name: zizmor sarif
+        alias: zizmor-sarif
+        entry: bash -c 'zizmor --no-progress --persona=auditor --format=sarif . > zizmor.sarif'
+        stages: [manual]
+        pass_filenames: false
+
+  - repo: https://github.com/tox-dev/pyproject-fmt
+    rev: 50e0f3aee9dc5747a5f173f79a7417403c18dda6  # frozen: v2.30.3
+    hooks:
+      - id: pyproject-fmt
+
+  - repo: https://github.com/tox-dev/tox-toml-fmt
+    rev: 5125f601c3e134347288c3d42f3b34298b7cf1be  # frozen: v1.11.1
+    hooks:
+      - id: tox-toml-fmt
+
+  - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
+    rev: 1f1ac45c93d1c2ce36b71330252c489a5f4f2724  # frozen: v9.27.0
+    hooks:
+      - id: commitlint
+        stages: [commit-msg]
+        additional_dependencies: ['@commitlint/config-conventional']
+
+  - repo: https://github.com/econchick/interrogate
+    rev: 4894019dc8876092bc9b6d56878798c550fad998  # frozen: 1.7.0
+    hooks:
+      - id: interrogate
+        args: [--config=pyproject.toml]
+        exclude: ^tests/
+        additional_dependencies: [tomli]
+
+  - repo: https://github.com/tombi-toml/tombi-pre-commit
+    rev: b3f6e09de51290a21d6c7b05b4f5cbe6cfe65b4f  # frozen: v1.9.6
+    hooks:
+      - id: tombi-format
+
+  - repo: https://github.com/rvben/rumdl-pre-commit
+    rev: 03a7d1a4936b5889602852175bca2d39acb3281e  # frozen: v0.3.0
+    hooks:
+      - id: rumdl
+        args: [--fix]
+        stages: [pre-commit]
+      - id: rumdl
+        name: rumdl github
+        alias: rumdl-github
+        args: [--output-format=github]
+        stages: [manual]
+
+  - repo: https://github.com/crate-ci/typos
+    rev: 7f9d0819ca1c008ade73f4b41fa9d258d48f605b  # frozen: v1.51.1
+    hooks:
+      - id: typos
+      - id: typos
+        name: typos fix
+        alias: typos-fix
+        args: [--write-changes]
+        stages: [manual]
+  - repo: https://github.com/owenlamont/ryl-pre-commit
+    rev: ebab13c478952f480f31b75f3fd7649993a4ce5e  # frozen: v0.26.1
+    hooks:
+      - id: ryl-markdown
+        name: ryl
+        alias: ryl
+        args: [--fix]
+        types_or: [yaml, markdown]
+        files: .*\.(ya?ml|md|markdown|mdx|qmd|Rmd)$
+        stages: [pre-commit]
+      - id: ryl-markdown
+        name: ryl github
+        alias: ryl-github
+        types_or: [yaml, markdown]
+        files: .*\.(ya?ml|md|markdown|mdx|qmd|Rmd)$
+        args: [--format=github]
+        stages: [manual]
