@@ -1,4 +1,4 @@
-# ruff: noqa: I001, S101
+# ruff: noqa: S101
 """Tests for shared corpus scanner I/O and CLI validation."""
 
 import json
@@ -6,10 +6,9 @@ from datetime import date
 from typing import TYPE_CHECKING
 
 import pytest
-from pydantic import ValidationError
-
 from corpus_scanner.cli import FrameStage, ScanStage
 from corpus_scanner.io import read_jsonl
+from pydantic import ValidationError
 
 if TYPE_CHECKING:
     from pathlib import Path

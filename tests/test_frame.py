@@ -1,4 +1,4 @@
-# ruff: noqa: I001, PLR2004, S101
+# ruff: noqa: PLR2004, S101
 """Tests for corpus sampling-frame construction."""
 
 import asyncio
@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING, Any
 from unittest.mock import AsyncMock
 
 import pytest
-
 from corpus_scanner import frame
 
 if TYPE_CHECKING:
