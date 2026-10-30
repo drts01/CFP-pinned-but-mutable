@@ -1,5 +1,6 @@
 ---
-exclude: ^(CHANGELOG\.md|uv\.lock|\.secrets\.baseline|memory-bank)$
+# Generated corpus artifacts are published verbatim; never rewrite them.
+exclude: ^(corpus/|uv\.lock$)
 repos:
   - repo: meta
     hooks:
@@ -97,11 +98,6 @@ repos:
     hooks:
       - id: pyproject-fmt
 
-  - repo: https://github.com/tox-dev/tox-toml-fmt
-    rev: 5125f601c3e134347288c3d42f3b34298b7cf1be  # frozen: v1.11.1
-    hooks:
-      - id: tox-toml-fmt
-
   - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
     rev: 1f1ac45c93d1c2ce36b71330252c489a5f4f2724  # frozen: v9.27.0
     hooks:
@@ -114,7 +110,7 @@ repos:
     hooks:
       - id: interrogate
         args: [--config=pyproject.toml]
-        exclude: ^tests/
+        exclude: ^(presentation|src/corpus_scanner/tests)/
         additional_dependencies: [tomli]
 
   - repo: https://github.com/tombi-toml/tombi-pre-commit
@@ -143,17 +139,18 @@ repos:
         alias: typos-fix
         args: [--write-changes]
         stages: [manual]
+
   - repo: https://github.com/owenlamont/ryl-pre-commit
     rev: ebab13c478952f480f31b75f3fd7649993a4ce5e  # frozen: v0.26.1
     hooks:
-      - id: ryl-markdown
+      - id: ryl-check-markdown
         name: ryl
         alias: ryl
         args: [--fix]
         types_or: [yaml, markdown]
         files: .*\.(ya?ml|md|markdown|mdx|qmd|Rmd)$
         stages: [pre-commit]
-      - id: ryl-markdown
+      - id: ryl-check-markdown
         name: ryl github
         alias: ryl-github
         types_or: [yaml, markdown]
