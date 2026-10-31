@@ -49,7 +49,7 @@ typecheck = [
 
 [tool.uv]
 # Pin private collector behavior to the exact commit; GitHub rejects Git fetches by commit SHA here.
-sources.pinref = { url = "https://github.com/drts01/pinref/archive/e3164b177544ac23d74509791bd508255cf7dfdb.tar.gz" }
+sources.pinref = { url = "https://github.com/drts01/pinref/archive/b16350d9bea2c75fbee07ae06acd88708caf3390.tar.gz" }  # v0.2.0
 build-backend.module-name = "corpus_scanner"
 
 [tool.ruff]

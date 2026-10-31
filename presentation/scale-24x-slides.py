@@ -407,7 +407,7 @@ def _(mo, s):
     - **Excluded:** local actions, and expression-valued refs such as `${{{{ github.sha }}}}`
     - **Intervals:** 95% Wilson score intervals, with every denominator shown
 
-    Scanner, sampling inputs, seed, and raw counts are published with these slides.
+    Scanner, sampling inputs, seed, and raw counts: [drts01/CFP-pinned-but-mutable](https://github.com/drts01/CFP-pinned-but-mutable)
     """)
     return
 
@@ -1028,7 +1028,8 @@ def _(mo):
     mo.md("""
     # Resources
 
-    - Corpus scanner, sampling inputs, seed, and raw counts: *repository URL to be published with the talk*
+    - Corpus scanner, sampling inputs, seed, and raw counts:
+      [drts01/CFP-pinned-but-mutable](https://github.com/drts01/CFP-pinned-but-mutable)
     - [GitHub: Secure use reference](https://docs.github.com/en/actions/reference/security/secure-use)
     - [GitHub: About forks](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/about-forks)
     - [GitHub: Workflow dependency lockfiles](https://docs.github.com/en/actions/concepts/security/workflow-dependency-lockfiles)

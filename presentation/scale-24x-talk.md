@@ -121,7 +121,7 @@ Revised 2026-10-26 for a longer session (40 minutes of content plus 5 of questio
 
 Revised 2026-10-20 for `ratchet`, which pins `docker://`, `container.image`, and `services[*].image` on GitHub Actions
 (see
-[`pinref` `docs/explanation/comparison.md`](https://github.com/drts01/pinref/blob/e3164b177544ac23d74509791bd508255cf7dfdb/docs/explanation/comparison.md)):
+[`pinref` `docs/explanation/comparison.md`](https://github.com/drts01/pinref/blob/b16350d9bea2c75fbee07ae06acd88708caf3390/docs/explanation/comparison.md)):
 
 - Dropped "the part nobody is talking about"; `ratchet` and Updatecli already address the image rows.
 - Named `ratchet` in the abstract.
@@ -484,7 +484,7 @@ The full scan finished on 2026-10-21.
 | 1   | Build the corpus scanner; sample public repos with workflow files                               | Abstract `N` | **Done** — `src/corpus_scanner/`                                                                                                   |
 | 2   | Run the pilot; decide the framing from the measured rates                                       | Thesis       | **Done** — see [Pilot Results](#pilot-results)                                                                                     |
 | 3   | Fact-check the fork-network and pinning claims against GitHub's documentation                   | Thesis       | **Done** — see [Primary-Source Review](#primary-source-review)                                                                     |
-| 4   | Run the full 50,000-repository scan; publish the artifacts                                      | Abstract `N` | **Scan done** — see [Full-Run Results](#full-run-results); publish data, code, seed, and instructions with the talk and slides     |
+| 4   | Run the full 50,000-repository scan; publish the artifacts                                      | Abstract `N` | **Done** 2026-10-30 — published at `drts01/CFP-pinned-but-mutable`; `pinref` tag and corpus snapshot tag open (tasks 34, 35)       |
 | 5   | Test `gh actions-lock` here and verify uncovered refs on a disposable branch or test repo       | Part 0 slide | Todo — installed `gh` (2.102.0) does not have `actions-lock`; no longer blocks the abstract                                        |
 | 6   | Reproduce the fork/impostor demo end-to-end in a throwaway org                                  | Part 2       | Todo — record the walk-through once it reproduces; no longer blocks submission                                                     |
 | 7   | Confirm each competing tool's behavior against the impostor SHA, empirically, not from docs     | Part 2       | Todo                                                                                                                               |
@@ -498,7 +498,7 @@ The full scan finished on 2026-10-21.
 | 15  | Split `X` into official and other images, and `Y` into same-owner and other-owner repos         | Part 1       | `X` partly done 2026-10-26 via `images-full.csv`; split `Y` by owner and by whether the job executes the checkout                  |
 | 16  | Find a primary-source incident per reference type, or state that none is known                  | Part 1       | Partly done 2026-10-29 — action tags, image tags, transitive tags sourced; checkout `ref:` and pre-commit `rev:` open              |
 | 17  | Run the public-corpus remediation dry run                                                       | Part 3       | Todo — abstract no longer promises results; quote none until done                                                                  |
-| 18  | Package the scanner so attendees can audit their own repositories                               | Close        | Todo                                                                                                                               |
+| 18  | Package the scanner so attendees can audit their own repositories                               | Close        | Todo — source public since 2026-10-30; no install or usage path for attendees' own repositories yet                                |
 | 19  | Review the speaker bio and confirm SCaLE 24x CFP fields, word limits, and track names           | Nov 1        | CFP fields, tracks, and the 1,000-character bio limit confirmed 2026-10-26; confirm the bio's claims and the Level options         |
 | 20  | Supply motivation facts: month and year, trigger, rounded fleet size, and clearance to say them | Nov 1        | Done 2026-10-25 — no clearance; date from the public first commit, no employer, count, or trigger                                  |
 | 21  | Verify `zizmor` coverage cells for `docker://` and service images against its audit docs        | Part 3       | Docs re-read 2026-10-29: `unpinned-images` covers `container.image` only; test service and `docker://` cells                       |
@@ -514,8 +514,13 @@ The full scan finished on 2026-10-21.
 | 31  | Read Truffle Security's 2024 Cross Fork Object Reference (FOR) post at the source               | Part 2       | Todo — page unreachable 2026-10-29; cite it only after reading it, or drop it                                                      |
 | 32  | Reorder `scale-24x-slides.py` to match the 2026-10-29 outline                                   | Talk         | **Done** 2026-10-29 — coverage table in Part 3; GitLab, Jenkins, and CircleCI slides in backup                                     |
 | 33  | Confirm the impostor `actions/checkout` SHA in the malicious Trivy v0.69.4 release workflow     | Part 2       | Todo — optional Part 2 aside; verify the SHA is fork-only before citing StepSecurity's claim                                       |
+| 34  | Push the `pinref` `v0.2.0` tag to GitHub                                                        | Provenance   | **Done** 2026-10-30 — GitHub resolves the annotated tag to `b16350d9bea2c75fbee07ae06acd88708caf3390`                              |
+| 35  | Tag the published corpus snapshot in this repository; link the proposal and slides to it        | Provenance   | Todo — links point to the repository root, and `trunk` changes when task 29 replaces the figures                                   |
 
-The scan half of task 4 is done; publish its artifacts with the talk and slides in a dedicated repository.
+Task 4 is done: the scanner, artifacts, seed,
+and instructions are public at <https://github.com/drts01/CFP-pinned-but-mutable>.
+Task 34 is done: the `pinref` `v0.2.0` tag is public.
+Task 35 remains open: tag a fixed corpus snapshot and point the proposal and slides at it.
 The measurement is the thesis again, so `N` belongs in the abstract.
 Use this repository's already SHA-pinned workflows for the first task 5 test,
 then use a disposable branch or test repository with container images, cross-repository `with.ref`,
@@ -532,7 +537,7 @@ and the talk survives — which is precisely the resilience the previous framing
 
 ### Open Work by Priority
 
-As of 2026-10-29; the CFP closes 2026-11-01.
+As of 2026-10-30; the CFP closes 2026-11-01.
 
 **P0 — before submission (November 1).**
 
@@ -552,7 +557,7 @@ As of 2026-10-29; the CFP closes 2026-11-01.
   Until then, the demo, review-diff, and provenance-table slides keep their warning callouts.
 - Task 31: verify the Truffle Security FOR post, or leave it off the prior-work slide.
 - Task 17: run the public-corpus dry run, or cut the remediation slide and extend the Part 2 review-diff beat.
-- Task 4: publish the scanner, inputs, seed, and raw counts; fill the resources-slide URL.
+- Task 35: tag the corpus snapshot and point the proposal and resources-slide links at the tag.
 - Task 5: test `gh actions-lock` before calling the lockfile boundary empirically verified.
 - Tasks 21 and 22: settle the `zizmor` coverage cells and the attestation wording.
 - Tasks 26 and 27: validate the update configurations and the partial-clone warning.
@@ -578,6 +583,12 @@ Run 2026-10-21 over 49,984 repositories, a seeded 50,000-repository sample of th
 The other 16 repositories no longer existed when cloned.
 Full output is in [`corpus/report-full.md`](../corpus/report-full.md); per-repository rows are in `corpus/corpus.csv`.
 This section supersedes the pilot figures below for every slide.
+
+The published corpus is attributed to `pinref` `v0.2.0`, commit SHA `b16350d9bea2c75fbee07ae06acd88708caf3390`.
+*Measured:* the artifacts in `corpus/` are byte-identical to those stored in `pinref` at `e3164b1`, and `src/`, `docs/`,
+and `pyproject.toml` do not differ between `e3164b1` and `v0.2.0`.
+*Inference:* classification at `v0.2.0` matches the run; the run did not record its `pinref` commit SHA,
+so the artifacts alone cannot confirm it.
 
 | Statistic                                   | Value                | 95% CI      | Verdict                                  |
 | ------------------------------------------- | -------------------- | ----------- | ---------------------------------------- |
@@ -738,7 +749,7 @@ and it positions the speaker as current rather than as someone who missed a plat
 `pinref` competes with a first-party feature on `uses:` pinning and provenance,
 and should compete on the surface the lockfile does not cover.
 Captured in
-[`pinref` `docs/explanation/threat-model.md` §4.1 and §6.1](https://github.com/drts01/pinref/blob/e3164b177544ac23d74509791bd508255cf7dfdb/docs/explanation/threat-model.md).
+[`pinref` `docs/explanation/threat-model.md` §4.1 and §6.1](https://github.com/drts01/pinref/blob/b16350d9bea2c75fbee07ae06acd88708caf3390/docs/explanation/threat-model.md).
 
 **Process note.**
 Two consecutive thesis pivots were proposed before anyone read the primary sources.
@@ -749,7 +760,7 @@ Fact-check against primary sources (tasks 3, 9, and 16) *before* the next framin
 Checked 2026-10-20 against vendor documentation for GitLab CI, CircleCI, Azure Pipelines, Jenkins, Buildkite, Tekton,
 Drone, Docker Hub, Amazon ECR, and GHCR.
 Full write-up, written for a general audience, in
-[`pinref` `docs/explanation/mutable-references-across-platforms.md`](https://github.com/drts01/pinref/blob/e3164b177544ac23d74509791bd508255cf7dfdb/docs/explanation/mutable-references-across-platforms.md).
+[`pinref` `docs/explanation/mutable-references-across-platforms.md`](https://github.com/drts01/pinref/blob/b16350d9bea2c75fbee07ae06acd88708caf3390/docs/explanation/mutable-references-across-platforms.md).
 
 **The thesis generalizes, and narrows.**
 Every platform has mutable config-layer references.
@@ -1179,27 +1190,29 @@ Decide each by the date in brackets.
 ## Citations
 
 Every claim in the proposal or on a slide needs a primary source.
-Status as of 2026-10-29.
+Status as of 2026-10-30.
 
 ### Verified
 
-| Claim                                                                                         | Source                                                                      | Checked    | Used in          |
-| --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ---------- | ---------------- |
-| Fork commits are reachable from the upstream repository                                       | [GitHub: About forks][gh-forks]                                             | 2026-10-20 | Proposal; Part 2 |
-| Verify a SHA comes from the action's repository, not a fork                                   | [GitHub: Secure use reference][gh-secure]                                   | 2026-10-20 | Part 2           |
-| Lockfiles verify source-repository identity; public preview                                   | [GitHub: Workflow dependency lockfiles][gh-lock]                            | 2026-10-20 | Proposal; Part 3 |
-| Organization and enterprise SHA-pinning policy                                                | GitHub changelog, 2025-08-15                                                | 2026-10-25 | Part 3           |
-| Immutable releases                                                                            | GitHub Docs, *Immutable releases*                                           | 2026-10-25 | Part 3           |
-| `tj-actions/changed-files`: CVE-2025-30066, repointed tags, secrets in logs, 2025-03-14 to 15 | [GHSA][ghsa], [StepSecurity][stepsec], [CISA][cisa], [#2463][tj-2463]       | 2026-10-29 | Part 0           |
-| Some SHA-pinned consumers ran the malicious commit after Renovate updates                     | [tj-actions/changed-files#2463][tj-2463]                                    | 2026-10-29 | Part 0           |
-| `reviewdog/action-setup@v1`: CVE-2025-30154, 2025-03-11, embedding actions affected           | [CVE record][cve-reviewdog], [Wiz][wiz-reviewdog], [Hunters][hunters]       | 2026-10-29 | Part 0           |
-| Trivy: CVE-2026-33634, 76 of 77 action tags, compromised images, older-SHA caveat             | [GHSA][ghsa-trivy], [Aqua][aqua-trivy], [StepSecurity][stepsec-trivy]       | 2026-10-29 | Proposal; Part 0 |
-| Imposter commits: disclosed to GitHub 2022-09-08, published 2023-03-08                        | [Chainguard, "What the fork?"][chainguard]                                  | 2026-10-29 | Proposal; Part 2 |
-| `impostor-commit` covers workflows, actions, and pre-commit                                   | [`zizmor` audit rules][zizmor]                                              | 2026-10-29 | Proposal; Q&A    |
-| `unpinned-images` covers `container.image` only, with no auto-fix                             | [`zizmor` audit rules][zizmor]                                              | 2026-10-29 | Part 3 table     |
-| Renovate and Dependabot image, pre-commit, and cooldown support                               | Vendor documentation                                                        | 2026-10-26 | Part 3           |
-| GitLab CI, Jenkins, and CircleCI syntax                                                       | Vendor documentation                                                        | 2026-10-26 | Part 1; backup   |
-| Corpus figures, frame size, and image breakdown                                               | `corpus/report-full.md`, `corpus/images-full.csv`, `corpus/frame.meta.json` | 2026-10-26 | Proposal; Part 1 |
+| Claim                                                                                         | Source                                                                      | Checked    | Used in           |
+| --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ---------- | ----------------- |
+| Fork commits are reachable from the upstream repository                                       | [GitHub: About forks][gh-forks]                                             | 2026-10-20 | Proposal; Part 2  |
+| Verify a SHA comes from the action's repository, not a fork                                   | [GitHub: Secure use reference][gh-secure]                                   | 2026-10-20 | Part 2            |
+| Lockfiles verify source-repository identity; public preview                                   | [GitHub: Workflow dependency lockfiles][gh-lock]                            | 2026-10-20 | Proposal; Part 3  |
+| Organization and enterprise SHA-pinning policy                                                | GitHub changelog, 2025-08-15                                                | 2026-10-25 | Part 3            |
+| Immutable releases                                                                            | GitHub Docs, *Immutable releases*                                           | 2026-10-25 | Part 3            |
+| `tj-actions/changed-files`: CVE-2025-30066, repointed tags, secrets in logs, 2025-03-14 to 15 | [GHSA][ghsa], [StepSecurity][stepsec], [CISA][cisa], [#2463][tj-2463]       | 2026-10-29 | Part 0            |
+| Some SHA-pinned consumers ran the malicious commit after Renovate updates                     | [tj-actions/changed-files#2463][tj-2463]                                    | 2026-10-29 | Part 0            |
+| `reviewdog/action-setup@v1`: CVE-2025-30154, 2025-03-11, embedding actions affected           | [CVE record][cve-reviewdog], [Wiz][wiz-reviewdog], [Hunters][hunters]       | 2026-10-29 | Part 0            |
+| Trivy: CVE-2026-33634, 76 of 77 action tags, compromised images, older-SHA caveat             | [GHSA][ghsa-trivy], [Aqua][aqua-trivy], [StepSecurity][stepsec-trivy]       | 2026-10-29 | Proposal; Part 0  |
+| Imposter commits: disclosed to GitHub 2022-09-08, published 2023-03-08                        | [Chainguard, "What the fork?"][chainguard]                                  | 2026-10-29 | Proposal; Part 2  |
+| `impostor-commit` covers workflows, actions, and pre-commit                                   | [`zizmor` audit rules][zizmor]                                              | 2026-10-29 | Proposal; Q&A     |
+| `unpinned-images` covers `container.image` only, with no auto-fix                             | [`zizmor` audit rules][zizmor]                                              | 2026-10-29 | Part 3 table      |
+| Renovate and Dependabot image, pre-commit, and cooldown support                               | Vendor documentation                                                        | 2026-10-26 | Part 3            |
+| GitLab CI, Jenkins, and CircleCI syntax                                                       | Vendor documentation                                                        | 2026-10-26 | Part 1; backup    |
+| Corpus figures, frame size, and image breakdown                                               | `corpus/report-full.md`, `corpus/images-full.csv`, `corpus/frame.meta.json` | 2026-10-26 | Proposal; Part 1  |
+| Scanner, artifacts, seed, and instructions are public                                         | [`drts01/CFP-pinned-but-mutable`][repo]                                     | 2026-10-30 | Proposal; close   |
+| `pinref` `v0.2.0` resolves to `b16350d9bea2c75fbee07ae06acd88708caf3390`                      | [`pinref` tag][pinref-v020]                                                 | 2026-10-30 | Corpus provenance |
 
 ### Needed
 
@@ -1214,8 +1227,9 @@ Status as of 2026-10-29.
 | GitLab keep-around refs and Azure fetch-by-SHA                 | Source reading, not tests                        | 14   |
 | Lockfile coverage boundary                                     | Documentation only; `gh actions-lock` untested   | 5    |
 | Renovate and Dependabot configurations work as shown           | Documentation only                               | 26   |
-| Published scanner repository URL                               | Not yet published                                | 4    |
 
+[repo]: https://github.com/drts01/CFP-pinned-but-mutable
+[pinref-v020]: https://github.com/drts01/pinref/tree/v0.2.0
 [gh-forks]: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/about-forks
 [gh-secure]: https://docs.github.com/en/actions/reference/security/secure-use
 [gh-lock]: https://docs.github.com/en/actions/concepts/security/workflow-dependency-lockfiles

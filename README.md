@@ -7,6 +7,7 @@ This repository holds the research, corpus data,
 and presentation materials for the SCaLE 24x talk "You Pinned Your GitHub Actions.
 What's Still Mutable?"
 Talk notes live in [`presentation/scale-24x-talk.md`](presentation/scale-24x-talk.md).
+The research is published at <https://github.com/drts01/CFP-pinned-but-mutable>.
 
 The corpus scanner depends on `pinref` but is not part of the published `pinref` package.
 
@@ -38,6 +39,11 @@ Cached clones with missing sparse-checkout content are repaired on fetch.
 Treat those imports as cross-repository coupling.
 `pyproject.toml` pins `pinref` to an exact commit SHA through `tool.uv.sources`;
 update the scanner and its tests whenever that pin moves and a collector signature changes.
+
+The published corpus in `corpus/` is attributed to [`pinref` `v0.2.0`](https://github.com/drts01/pinref/tree/v0.2.0),
+which resolves to commit SHA `b16350d9bea2c75fbee07ae06acd88708caf3390`.
+That tag differs from `e3164b177544ac23d74509791bd508255cf7dfdb`, the commit that first stored the corpus,
+only in `.gitignore` and the removal of `notes/`; `src/`, `docs/`, and `pyproject.toml` are identical.
 
 ## Usage
 

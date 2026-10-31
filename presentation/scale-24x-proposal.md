@@ -103,7 +103,8 @@ Local actions and expression-valued references (`${{ ... }}`) are excluded.
 Pre-commit revisions count only when a workflow runs pre-commit;
 cross-repository checkout refs count whether or not the job executes the checked-out code.
 I will rerun the scan in March 2027 and update every figure.
-The scanner, sampling inputs, seed, raw counts, and reproduction instructions will be published with the talk.
+The scanner, sampling inputs, seed, raw counts,
+and reproduction instructions are published at <https://github.com/drts01/CFP-pinned-but-mutable>.
 
 **Known limits.**
 Results cover GitHub Actions only and may differ below the 100-star floor.
@@ -158,6 +159,9 @@ Do not paste this section into the CFP form.
 - Do not quote remediation or rollout results until the public-corpus dry run is complete.
   Do not present internal data.
 - Rerun the scan in March 2027 with the published seed, as the reviewer message promises.
+- The published corpus is attributed to `pinref` `v0.2.0`,
+  which resolves on GitHub to commit SHA `b16350d9bea2c75fbee07ae06acd88708caf3390` (task 34 done).
+- Tag the published corpus snapshot and decide whether the reviewer-message link should point at the tag (task 35).
 - Decide whether to also submit to SunSecCon, the co-located security event with its own CFP tool;
   its CFP asks for supply-chain talks and live demos.
   Check its deadline and whether dual submission is allowed.

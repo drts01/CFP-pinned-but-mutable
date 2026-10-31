@@ -1,7 +1,7 @@
 # Impostor-Commit End-to-End Tests (task 14)
 
 Confirm or refute the source-code findings in
-[`pinref` `docs/explanation/mutable-references-across-platforms.md` §4](https://github.com/drts01/pinref/blob/e3164b177544ac23d74509791bd508255cf7dfdb/docs/explanation/mutable-references-across-platforms.md)
+[`pinref` `docs/explanation/mutable-references-across-platforms.md` §4](https://github.com/drts01/pinref/blob/b16350d9bea2c75fbee07ae06acd88708caf3390/docs/explanation/mutable-references-across-platforms.md)
 before they appear on a slide as fact.
 
 ## Ground rules
