@@ -1,7 +1,6 @@
 # SCaLE 24x Talk Proposal
 
-**Title:** You Pinned Your GitHub Actions.
-What's Still Mutable?
+**Title:** Beyond the SHA: What's Still Mutable in Pinned GitHub Actions.
 
 **Track:** Security (fallback: Developers, Platform Engineering & DevEx)
 
@@ -11,14 +10,14 @@ What's Still Mutable?
 
 ## Short Abstract
 
-Pinning GitHub Actions to commit SHAs is standard advice.
-In a scan of 32,863 public repositories, 87.8% don't follow it,
-and 14.8% of those that do still reference mutable container images, checkout refs, or pre-commit hooks.
+Pinning GitHub Actions to commit SHAs is standard advice, and most projects skip it:
+of 32,863 public repositories that use actions from other repositories, 87.8% do not pin them all.
+Among those that do, 14.8% still reference mutable container images, checkout refs, or pre-commit hooks.
 Learn what SHA pinning misses, why a SHA fixes content but not origin, and how to audit your pipelines.
 
 ## Long Abstract
 
-You pinned every `uses:` in your GitHub Actions workflows to a full commit SHA.
+You did everything by the book: every `uses:` in your workflows points to a full commit SHA.
 Your jobs can still run code from mutable container images, cross-repository checkouts, and pre-commit hooks.
 
 Tags are pointers, and pointers move.
@@ -30,8 +29,7 @@ but older `trivy-action` commits pinned by SHA still loaded a compromised `setup
 I scanned 49,984 public GitHub repositories.
 Of the 32,863 using actions from other repositories, 87.8% do not pin all of them to commit SHAs.
 Even among the 4,008 that do, one in seven
-(592, or 14.8%)
-still have a mutable container image, cross-repository checkout ref, or pre-commit revision that CI runs.
+(592, or 14.8%) still have a mutable container image, cross-repository checkout ref, or pre-commit hooks that CI runs.
 In 203 of the 358 repositories with a mutable image, the floating image is the job container itself,
 the environment every step runs inside.
 These figures are undercounts: the scan does not follow transitive references inside pinned actions.
@@ -48,13 +46,14 @@ and weigh the review effort and patch latency that come with maintaining pins.
 
 ## Audience Takeaways
 
-- Identify every mutable reference a workflow resolves, not only `uses:`.
+- Find and record every mutable reference a workflow resolves
+  (container images, checkout refs, pre-commit revisions), not only `uses:`.
 - Understand why a commit SHA fixes content but does not establish repository identity,
   and check a SHA's origin with Git.
 - Audit container images, cross-repository `actions/checkout` refs,
   and pre-commit revisions without treating expression-valued refs as ordinary tags.
 - Recognize the same patterns in GitLab CI, Jenkins, and CircleCI configurations.
-- Choose complementary controls for pinning, provenance, updates, and detection, and weigh their costs.
+- Layer pinning, provenance, update, and detection controls, and weigh their review effort against patch latency.
 
 ## Session Plan
 
@@ -149,10 +148,11 @@ Do not paste this section into the CFP form.
   Recount characters after any edit.
 - Keep the current employer out of every field: no employer clearance exists,
   so do not name the employer, its repositories, the repository count, or the trigger.
-- Confirm whether the employer's outside-activity policy requires approval to speak at all, independent of content.
-- Re-check the lockfile feature's status and coverage against GitHub's documentation before submission.
-- Re-check the Trivy figures in the Long Abstract against GHSA-69fq-xp46-6x23 before submission:
+- Employer approval to speak is not required (confirmed 2026-11-01).
+- Lockfiles remain in public preview (confirmed 2026-11-01 against GitHub's documentation).
+- The Trivy figures in the Long Abstract match GHSA-69fq-xp46-6x23 (confirmed 2026-11-01):
   76 of 77 `trivy-action` tags, compromised images, CVE-2026-33634, and the older-SHA `setup-trivy` caveat.
+- Paste the title into the form exactly as written above.
 - The 17–27 minute segment promises a recorded walk-through, not a live demo, so it does not block submission.
   Record the fork-only-commit run before the conference, with pre-commit if it reproduces.
   Run it live only if it reproduces reliably; the recording stays the fallback.

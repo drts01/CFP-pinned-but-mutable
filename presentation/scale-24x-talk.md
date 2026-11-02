@@ -1,4 +1,4 @@
-# SCaLE 24x Talk Notes — "You Pinned Your GitHub Actions. What's Still Mutable?"
+# SCaLE 24x Talk Notes — "Beyond the SHA: What's Still Mutable in Pinned GitHub Actions."
 
 Working notes for a SCaLE 24x proposal and presentation.
 Not part of the published documentation site.
@@ -69,19 +69,25 @@ Three claims, in descending order of strength.
 Ranked.
 Prefer plain language over puns; SCaLE abstracts are scanned quickly.
 
-1. **You Pinned Your GitHub Actions.
-   What's Still Mutable?**
+1. **Beyond the SHA: What's Still Mutable in Pinned GitHub Actions.**
+   Selected 2026-11-01; names the measured platform and asks the question the cold open answers.
    The CFP form has no subtitle field; "a 50,000-repository sample" lives in the short abstract instead.
-2. Every Mutable Reference in Your CI Workflow, Measured
-3. A SHA Is Not a Promise: Immutable References in CI Workflows
-4. You Pinned Your GitHub Actions.
+2. You Pinned Your GitHub Actions.
+   What's Still Mutable?
+3. Every Mutable Reference in Your CI Workflow, Measured
+4. A SHA Is Not a Promise: Immutable References in CI Workflows
+5. You Pinned Your GitHub Actions.
    You're Still Not Pinned.
-5. Lockfiles Fixed Half Your Workflow.
+6. Lockfiles Fixed Half Your Workflow.
    Here's the Other Half.
+7. Beyond the SHA: Eliminating Hidden Mutability in CI/CD Pipelines
+   Rejected 2026-11-01: "Eliminating" promises remediation the talk does not deliver,
+   "CI/CD Pipelines" claims scope beyond the GitHub Actions measurement,
+   and dropping "GitHub Actions" loses the program-guide keyword.
 
-Candidate 1 names the measured platform and asks the question the cold open answers.
-It does not imply that all pinned repositories have remaining mutable references (the scan finds about one in seven).
-Candidate 4 makes that claim too broadly; candidate 5 depends on a preview feature and is retained only for the record.
+Candidate 1 does not imply that all pinned repositories have remaining mutable references
+(the scan finds about one in seven).
+Candidate 5 makes that claim too broadly; candidate 6 depends on a preview feature and is retained only for the record.
 Keep all of them listed so the reasoning is not relitigated.
 
 ## Draft Abstract (submittable)
@@ -169,6 +175,19 @@ Revised again 2026-10-29 for the deadline:
   the `tj-actions` Renovate lesson on the cost slide, and advisories on the resources slide.
 - Added the Chainguard and `zizmor` prior-work credit to Part 2's first slide, as the proposal promises.
 - Renamed the Part 2 demo slide to a walk-through and made the recording the primary path.
+
+Revised 2026-11-01 after reviewing a proposed rewrite:
+
+- Initially kept the title; recorded the proposed alternative as candidate 7 with the reasons it was rejected.
+- Named the 32,863-repository denominator directly in the short abstract;
+  the prior wording read as if the scan covered only 32,863 repositories.
+- Opened the long abstract with "You did everything by the book".
+- Listed the reference types in the first takeaway and named review effort and patch latency in the last.
+- Rejected the rewrite's claim that force-pushed tags and fork commits "bypass SHA immutability":
+  neither changes what a SHA names; the gaps are unpinned refs and unverified origin.
+
+Selected the hybrid title on 2026-11-01, retaining the measured GitHub Actions scope without promising elimination.
+Updated the proposal and deck title to match.
 
 ## Outline — 40 minutes plus 5 of questions
 

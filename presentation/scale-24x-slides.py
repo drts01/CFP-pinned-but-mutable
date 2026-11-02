@@ -17,7 +17,7 @@ import marimo
 __generated_with = "0.25.2"
 app = marimo.App(
     width="medium",
-    app_title="You Pinned Your GitHub Actions. What\u2019s Still Mutable?",
+    app_title="Beyond the SHA: What\u2019s Still Mutable in Pinned GitHub Actions.",
 )
 
 
@@ -197,8 +197,8 @@ def _(mo):
 def _(mo):
     mo.md(
         """
-        # You Pinned Your GitHub Actions.
-        # What\u2019s Still Mutable?
+        # Beyond the SHA:
+        # What\u2019s Still Mutable in Pinned GitHub Actions.
 
         ### Mutable references in a 50,000-repository sample
 
